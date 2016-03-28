@@ -14,10 +14,12 @@ public class PathNode : IComparable<PathNode>
     }
 
     public Postion Position { get; set; }
+    public bool IsPass;//是否障碍物，能否穿过
     public PathNode(int h,int g)
     {
         EndH = h;
         StartG = g;
+        IsPass = true;
     }
 
 
