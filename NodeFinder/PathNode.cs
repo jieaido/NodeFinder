@@ -22,6 +22,11 @@ public class PathNode : IComparable<PathNode>
         IsPass = true;
     }
 
+    public PathNode(Postion postion)
+    {
+        Position = postion;
+    }
+
 
     public int CompareTo(PathNode other)
     {
@@ -39,18 +44,38 @@ public class PathNode : IComparable<PathNode>
     {
         return "PathNode_F:" + this.TotalF;
     }
-    
+
+    public static int CalcEndH(Postion startPostion, Postion goalpPostion)
+    {
+        return Math.Abs(goalpPostion.Y - startPostion.Y) + Math.Abs(goalpPostion.X - startPostion.X);
+    }
 }
 
-public struct Postion
+public class Postion
 {
-    int X;
-    int Y;
+    public int X;
+    public int Y;
 
     public Postion(int x, int y)
     {
         X = x;
         Y = y;
     }
+
+    public static bool operator ==(Postion p1, Postion p2)
+    {
+        if (p1.X==p2.X&&p1.Y==p2.Y)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public static bool operator !=(Postion p1, Postion p2)
+    {
+        return !(p1 == p2);
+    }
+
+    
 }
 
