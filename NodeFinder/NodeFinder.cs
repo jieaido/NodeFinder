@@ -33,12 +33,15 @@ namespace NodeFinder
             {
                 Nodes[rd.Next(Nodes.Count)].IsPass = false;
             }
+
+
+          
         }
 
         public bool SerachGoal(Postion startPostion, Postion goalpostion,out string Msg)
         {
             Msg = "";
-            List<PathNode> CalcNodes = null;//这是寻找到的
+            List<PathNode> CalcNodes = null;//这是寻找到的周围的点
             //todo   增加positon类的==操作符重写，判断startpostion==goalposition的情况 
             _startNode = Nodes.Find(p => p.Position == startPostion );
             _goalNode = Nodes.Find(p => p.Position == goalpostion);
