@@ -36,7 +36,7 @@ public class PathFinder
     public bool SerachGoal(Postion startPostion, Postion goalpostion)
     {
 
-        List<PathNode> CalcNodes;//这是寻找到的
+        List<PathNode> CalcNodes = null;//这是寻找到的
        //todo   增加positon类的==操作符重写，判断startpostion==goalposition的情况 
         _startNode = Nodes.Find(p => p.Position == startPostion );
         _goalNode = Nodes.Find(p => p.Position == goalpostion);
@@ -54,16 +54,50 @@ public class PathFinder
             calcNode = OpenNodes.OrderBy(s=>s.TotalF).First();
             if (calcNode!=_goalNode)
             {
+                if (CalcNodes!=null&&CalcNodes.Count>0)
+                {
+                    CalcNodes.Clear();
+                }
                 FindGroundNodes(calcNode, out CalcNodes);
                 for (int i = 0; i < CloseNodes.Count; i++)
                 {
-                    if (OpenNodes.Contains(CalcNodes[i]))
+                    if (!OpenNodes.Exists(s => s.Position == CalcNodes[i].Position) &&
+                       !CloseNodes.Exists(s => s.Position == CalcNodes[i].Position)) 
                     {
+                        
+                        //如果表不在open表中又不在close中,则加入open表中,这里就是计算这个postion在不在表中
+                        OpenNodes.Add(CalcNodes[i]);
+                        continue;
+
 
                     }
+                    if (OpenNodes.Exists(s=>s.Position==CalcNodes[i].Position))
+                    {
+                        //如果已经在open表中,并且现在的代价值更低,就更新原来点的信息
+                        var p= OpenNodes.Find(s => s.Position == CalcNodes[i].Position);
+                        if (CalcNodes[i].TotalF<p.TotalF)
+                        {
+                            OpenNodes.Remove(p);
+                            OpenNodes.Add(CalcNodes[i]);
+                        }
+                        continue;
+                    }
+                    if (CloseNodes.Exists(s=>s.Position==CalcNodes[i].Position))
+                    {
+                        //如果点在close表中,并且现在的代价比原来的低,就把原来的点从close表移除,加入open表
+                        var p = OpenNodes.Find(s => s.Position == CalcNodes[i].Position);
+                        if (CalcNodes[i].TotalF<p.TotalF)
+                        {
+                            CloseNodes.Remove(p);
+                            OpenNodes.Add(CalcNodes[i]);
+                        }
+                        continue;
+                    }
+
                 }
                
             }
+
            
         }
 
@@ -82,7 +116,7 @@ public class PathFinder
         {
             p1,p2,p3,p4
         };
-       
+       //先找到周围的点
         pns=new List<PathNode>();
         for (int i = 0; i < pp.Length; i++)
         {
@@ -91,6 +125,7 @@ public class PathFinder
                 pp[i].ParentNode = pn;
                 CalcTotalF(pp[i],_goalNode);
                 pns.Add(pp[i]);
+                //如果能找到点，并且该点不是障碍物，就把这个点加入临时需要计算的list里
             }
         }
        
