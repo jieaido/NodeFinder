@@ -10,19 +10,12 @@ namespace NodeFinder
     {
         static void Main(string[] args)
         {
-            Random rd=new Random();
-            List<PathNode> openNodes=new List<PathNode>();
-            for (int i = 0; i < 10; i++)
-            {
-                PathNode pn=new PathNode(rd.Next(10),rd.Next(10));
-                openNodes.Add(pn);
-            }
-            //openNodes.Sort();
-            var ss = openNodes.OrderBy(s => s.TotalF);
-            foreach (var openNode in ss)
-            {
-                Console.WriteLine(openNode);
-            }
+           PathFinder pf=new PathFinder();
+            pf.InitPath(12,5,6);
+            string msg;
+            pf.SerachGoal(new Postion(0, 1), new Postion(6, 4), out msg);
+            Console.WriteLine("11");
+            Console.WriteLine(msg);
             Console.ReadKey();
         }
     }

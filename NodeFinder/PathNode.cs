@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 
 public class PathNode : IComparable<PathNode>
@@ -14,7 +15,7 @@ public class PathNode : IComparable<PathNode>
     }
 
     public Postion Position { get; set; }
-    public bool IsPass;//是否障碍物，能否穿过
+    public bool IsPass=true;//是否障碍物，能否穿过,要设置个默认值为true
     public PathNode(int h,int g)
     {
         EndH = h;
@@ -42,7 +43,7 @@ public class PathNode : IComparable<PathNode>
 
     public override string ToString()
     {
-        return "PathNode_F:" + this.TotalF;
+        return "PathNode--F:" + this.TotalF+"--G:"+this.StartG+"--H:"+this.EndH;
     }
 
     public static int CalcEndH(Postion startPostion, Postion goalpPostion)
@@ -76,6 +77,9 @@ public class Postion
         return !(p1 == p2);
     }
 
-    
+    public override string ToString()
+    {
+        return "Pos:"+ X.ToString() +","+ Y.ToString();
+    }
 }
 
